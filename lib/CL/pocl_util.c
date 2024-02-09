@@ -2349,12 +2349,15 @@ pocl_update_event_finished (cl_int status, const char *func, unsigned line,
                             cl_event event, const char *msg)
 {
   assert (event != NULL);
-  assert (event->queue != NULL);
-  assert (event->status > CL_COMPLETE);
+  
 
   cl_command_queue cq = event->queue;
   POCL_LOCK_OBJ (cq);
   POCL_LOCK_OBJ (event);
+
+  assert (event->queue != NULL);
+  assert (event->status > CL_COMPLETE);
+  
   if ((cq->properties & CL_QUEUE_PROFILING_ENABLE)
       && (cq->device->has_own_timer == 0))
     event->time_end = pocl_gettimemono_ns ();
